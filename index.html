@@ -452,6 +452,7 @@
       if (idx < 0 || idx >= photoData.length) return;
       _cp = photoData[idx].dataUrl;
       _epi = idx;
+      _classifyIdx = idx;
       document.getElementById('editor-overlay').classList.add('active');
       initEditor(_cp, 'fabric-container');
     }
@@ -1039,6 +1040,11 @@
       // If we came from classify page, re-select the photo
       if (_classifyIdx >= 0 && _classifyIdx < photoData.length) {
         selectPhotoForClassify(_classifyIdx);
+      }
+
+      // If we came from Step 2, navigate to Step 3
+      if (_wizPage === 2 && savedEpi != null) {
+        goToPage(3);
       }
 
       updateGotoStep3Btn();
