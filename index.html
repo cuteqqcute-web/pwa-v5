@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>餐廳選擇</title>
+  <title>日巡系統 V5</title>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;background:#f5f5f7;color:#1d1d1f;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;-webkit-tap-highlight-color:transparent}
-    .card{background:#fff;border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.08);width:100%;max-width:380px;padding:28px 24px}
-    h1{font-size:1.5rem;font-weight:700;margin-bottom:6px;color:#1d1d1f}
-    .subtitle{font-size:.875rem;color:#86868b;margin-bottom:20px}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;background:#f5f5f7;color:#1d1d1f;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0;-webkit-tap-highlight-color:transparent}
+    .card{background:#fff;width:100%;max-width:430px;height:100vh;max-height:100vh;display:flex;flex-direction:column;border-radius:0;padding:8px 16px;margin:0 auto}
+    h1{font-size:1.35rem;font-weight:700;margin-bottom:6px;color:#1d1d1f}
+    .subtitle{font-size:.8125rem;color:#86868b;margin-bottom:14px}
     label{display:block;font-size:.8125rem;font-weight:600;color:#86868b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
     select{width:100%;padding:14px 16px;font-size:1rem;font-family:inherit;border:2px solid #e5e5ea;border-radius:12px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%2386868b' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 16px center;appearance:none;-webkit-appearance:none;color:#1d1d1f;cursor:pointer;transition:border-color .15s ease}
     select:focus{outline:none;border-color:#0071e3;box-shadow:0 0 0 3px rgba(0,113,227,0.15)}
@@ -17,7 +17,7 @@
     .result .placeholder{color:#aeaeb2;font-size:.9375rem}
     .result .selected{color:#1d1d1f;font-size:1.0625rem;font-weight:600}
     .result .code{color:#86868b;font-size:.8125rem;font-weight:400;margin-left:8px}
-    .groups{margin-top:20px}
+    /* Group / Device / Abnormal buttons */
     .groups-title,.devices-title,.abnormals-title,.camera-title{font-size:.8125rem;font-weight:600;color:#86868b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
     .group-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
     .group-btn,.device-btn{padding:12px 8px;font-family:inherit;font-weight:500;color:#1d1d1f;background:#f9f9fb;border:2px solid #e5e5ea;border-radius:10px;cursor:pointer;transition:border-color .15s ease,background .15s ease;text-align:center;-webkit-tap-highlight-color:transparent}
@@ -26,11 +26,6 @@
     .group-btn:hover,.device-btn:hover{border-color:#0071e3;background:#eaf2fd}
     .group-btn:active,.device-btn:active{background:#d0e4f9}
     .group-btn.selected,.device-btn.selected{border-color:#0071e3;background:#0071e3;color:#fff}
-    .group-result,.device-result,.abnormal-result{margin-top:12px;padding:10px 12px;background:#f9f9fb;border-radius:12px;text-align:center;display:flex;align-items:center;justify-content:center;font-size:.875rem;color:#86868b}
-    .group-result{margin-top:16px;padding:12px;min-height:44px;font-size:.9375rem}
-    .device-result,.abnormal-result{min-height:40px}
-    .abnormal-result{color:#1d1d1f;font-weight:600}
-    .devices,.abnormals,.camera{margin-top:16px;display:none}
     .device-grid,.abnormal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
     .abnormal-btn{padding:10px 8px;font-size:.8125rem;font-family:inherit;font-weight:500;color:#fff;border:2px solid transparent;border-radius:10px;cursor:pointer;transition:opacity .15s ease,transform .15s ease,box-shadow .15s ease;text-align:center;word-break:break-word;-webkit-tap-highlight-color:transparent}
     .abnormal-btn:hover{opacity:.85}
@@ -40,6 +35,16 @@
     .abnormal-btn.high{background:#fd7e14}
     .abnormal-btn.medium{background:#0d6efd}
     .abnormal-btn.low{background:#6c757d}
+    /* Custom abnormal button */
+    .abnormal-btn.custom{background:transparent;color:#8e8e93;border:2px dashed #c7c7cc;font-size:.8125rem}
+    .abnormal-btn.custom:hover{background:rgba(142,142,147,0.1);opacity:1}
+    .abnormal-btn.custom.selected{box-shadow:0 0 0 3px #8e8e93;transform:scale(1.03);background:rgba(142,142,147,0.15);border-style:dashed}
+    /* Info rows */
+    .group-result,.device-result,.abnormal-result{margin-top:12px;padding:10px 12px;background:#f9f9fb;border-radius:12px;text-align:center;display:flex;align-items:center;justify-content:center;font-size:.875rem;color:#86868b}
+    .group-result{margin-top:16px;padding:12px;min-height:44px;font-size:.9375rem}
+    .device-result,.abnormal-result{min-height:40px}
+    .abnormal-result{color:#1d1d1f;font-weight:600}
+    /* Camera / Export buttons */
     .camera-actions,.export-actions{display:flex;gap:10px}
     .camera-actions{margin-bottom:12px}
     .export-actions{margin-top:14px}
@@ -49,11 +54,17 @@
     .export-btn.share{background:#0071e3}
     .camera-btn:hover,.export-btn:hover{opacity:.85}
     .camera-btn:active,.export-btn:active{opacity:.7}
+    /* Photo grid */
     .photo-grid{display:flex;flex-wrap:wrap;gap:8px}
     .photo-item{position:relative;width:80px;height:80px;border-radius:10px;overflow:hidden;border:2px solid #e5e5ea}
     .photo-item img{width:100%;height:100%;object-fit:cover;display:block}
     .photo-item .photo-del{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;border:none;font-size:12px;line-height:22px;text-align:center;cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent}
-    footer{margin-top:32px;font-size:.75rem;color:#aeaeb2;text-align:center}
+    /* Classified checkmark */
+    .photo-item.classified::after{content:'✓';position:absolute;top:2px;left:2px;background:#34c759;color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;z-index:2}
+    /* Classify grid item selection */
+    .photo-item.classify-item{cursor:pointer}
+    .photo-item.classify-item.selected{border-color:#0071e3;box-shadow:0 0 0 2px rgba(0,113,227,0.3)}
+    footer{margin-top:auto;padding:8px 0;font-size:.75rem;color:#aeaeb2;text-align:center}
     /* Editor Overlay */
     #editor-overlay{position:fixed;inset:0;z-index:1000;background:rgba(15,14,23,.95);display:none;flex-direction:column}
     #editor-overlay.active{display:flex}
@@ -77,9 +88,7 @@
     .preview-btn.edit-btn{background:#ff8906;color:#000}
     .preview-btn.confirm-btn{background:#34c759}
     .preview-btn.discard-btn{background:#dc3545}
-    /* ===== Wizard Layout ===== */
-    body{padding:0;justify-content:flex-start}
-    .card{height:100vh;max-height:100vh;display:flex;flex-direction:column;border-radius:0;padding:8px 16px;max-width:430px;margin:0 auto}
+    /* Wizard Layout */
     .wizard-progress{display:flex;justify-content:center;align-items:center;gap:10px;padding:8px 0 12px;flex-shrink:0}
     .wiz-dot{width:10px;height:10px;border-radius:50%;background:#d2d2d7;transition:all .3s ease}
     .wiz-dot.active{background:#0071e3;width:12px;height:12px;box-shadow:0 0 0 3px rgba(0,113,227,0.2)}
@@ -94,12 +103,9 @@
     .wizard-prev-btn{padding:11px 28px;font-size:.9375rem;font-family:inherit;font-weight:600;color:#0071e3;background:#fff;border:2px solid #0071e3;border-radius:12px;cursor:pointer;transition:opacity .15s ease;-webkit-tap-highlight-color:transparent}
     .wizard-prev-btn:hover{opacity:.8}
     .wizard-prev-btn:active{opacity:.6}
-    h1{font-size:1.35rem}
-    .subtitle{font-size:.8125rem;margin-bottom:14px}
-    footer{margin-top:auto;padding:8px 0}
-    /* Ensure wizard-page sections don't have conflicting margin */
-    .wizard-page .devices,.wizard-page .abnormals,.wizard-page .camera{margin-top:0}
-    .wizard-page .groups{margin-top:0}
+    .wizard-next-btn{padding:11px 28px;font-size:.9375rem;font-family:inherit;font-weight:600;color:#fff;background:#0071e3;border:none;border-radius:12px;cursor:pointer;transition:opacity .15s ease;-webkit-tap-highlight-color:transparent}
+    .wizard-next-btn:hover{opacity:.85}
+    .wizard-next-btn:active{opacity:.7}
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
 </head>
@@ -112,9 +118,10 @@
       <span class="wiz-dot active" data-step="1"></span>
       <span class="wiz-dot" data-step="2"></span>
       <span class="wiz-dot" data-step="3"></span>
+      <span class="wiz-dot" data-step="4"></span>
     </div>
 
-    <!-- Page 1: 餐廳 + 設備群組 -->
+    <!-- ==================== Page 1: 餐廳選擇 ==================== -->
     <div class="wizard-page active" id="wiz-page-1">
       <h1>🍽 餐廳選擇</h1>
       <p class="subtitle">請選擇一間餐廳</p>
@@ -128,61 +135,88 @@
         <span class="placeholder">尚未選擇</span>
       </div>
 
-      <div class="groups" id="groups" style="display:none;">
-        <p class="groups-title">請選擇設備群組</p>
-        <div class="group-grid" id="groupGrid"></div>
-        <div class="group-result" id="groupResult"></div>
-      </div>
-      <div style="padding:12px 0 8px;display:flex;justify-content:center;">
+      <div style="padding:12px 0 8px;display:flex;justify-content:center;gap:10px;">
         <button class="wizard-prev-btn" onclick="prevPage()" style="display:none;">← 上一步</button>
+        <button class="wizard-next-btn" onclick="goToPage(2)" id="gotoStep2Btn" style="display:none;">下一步：拍照 →</button>
       </div>
     </div>
 
-    <!-- Page 2: 設備 + 異常狀態 -->
+    <!-- ==================== Page 2: 拍照 (純拍照，無設備/異常選擇) ==================== -->
     <div class="wizard-page" id="wiz-page-2">
-      <h1>🔧 設備檢查</h1>
-      <p class="subtitle">選擇設備與異常狀態</p>
+      <h1>📸 拍照</h1>
+      <p class="subtitle">拍攝或選取照片（可連續多張，點擊照片可編輯）</p>
 
-      <div class="devices" id="devices">
-        <p class="devices-title">設備列表</p>
-        <div class="device-grid" id="deviceGrid"></div>
-        <div class="device-result" id="deviceResult"></div>
+      <div class="camera-actions">
+        <label for="cameraInput" class="camera-btn" style="flex:1;display:flex;align-items:center;justify-content:center">📷 拍照</label>
+        <input type="file" accept="image/*" capture="environment" id="cameraInput" style="display:none">
+        <label class="camera-btn album" style="flex:1;display:flex;align-items:center;justify-content:center">
+          🖼️ 從相簿選取
+          <input type="file" accept="image/*" id="albumInput" style="display:none">
+        </label>
       </div>
+      <div class="photo-grid" id="photoGrid2"></div>
 
-      <div class="abnormals" id="abnormals" style="display:none;">
-        <p class="abnormals-title">異常狀態</p>
-        <div class="abnormal-grid" id="abnormalGrid"></div>
-        <div class="abnormal-result" id="abnormalResult"></div>
-      </div>
-      <div style="padding:12px 0 8px;display:flex;justify-content:center;">
-        <button class="wizard-prev-btn" onclick="prevPage()" style="display:none;">← 上一步</button>
+      <div style="padding:12px 0 8px;display:flex;justify-content:center;gap:10px;">
+        <button class="wizard-prev-btn" onclick="prevPage()">← 上一步</button>
+        <button class="wizard-next-btn" onclick="goToPage(3)" id="gotoStep3Btn" style="display:none;">下一步：分類 →</button>
       </div>
     </div>
 
-    <!-- Page 3: 預覽 + 產出 -->
+    <!-- ==================== Page 3: 分類 (群組→設備→異常→儲存) ==================== -->
     <div class="wizard-page" id="wiz-page-3">
+      <h1>🏷️ 照片分類</h1>
+      <p class="subtitle" id="classifySubtitle">點選照片，為它選擇設備與異常狀態</p>
+
+      <!-- Photo grid for classification -->
+      <div class="photo-grid" id="photoGrid3" style="margin-bottom:8px;"></div>
+
+      <!-- Classification panel (shown when a photo is selected) -->
+      <div id="classifyPanel" style="display:none;">
+        <div class="groups" style="margin-top:0;display:block;">
+          <p class="groups-title">設備群組</p>
+          <div class="group-grid" id="groupGrid"></div>
+          <div class="group-result" id="groupResult"></div>
+        </div>
+
+        <div class="devices" id="classifyDevices" style="display:none;margin-top:8px;">
+          <p class="devices-title">設備列表</p>
+          <div class="device-grid" id="deviceGrid"></div>
+          <div class="device-result" id="deviceResult"></div>
+        </div>
+
+        <div class="abnormals" id="classifyAbnormals" style="display:none;margin-top:8px;">
+          <p class="abnormals-title">異常狀態</p>
+          <div class="abnormal-grid" id="abnormalGrid"></div>
+          <div class="abnormal-result" id="abnormalResult"></div>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:12px;" id="classifyActions">
+          <button class="preview-btn edit-btn" onclick="editClassifyPhoto()" style="flex:1;">✏️ 編輯照片</button>
+          <button class="preview-btn confirm-btn" onclick="confirmClassify()" style="flex:1;">✓ 確認分類</button>
+        </div>
+      </div>
+
+      <div style="padding:12px 0 8px;display:flex;justify-content:center;gap:10px;">
+        <button class="wizard-prev-btn" onclick="prevPage()">← 回拍照</button>
+        <button class="wizard-next-btn" onclick="goToPage(4)" id="gotoStep4Btn" style="display:none;">下一步：預覽匯出 →</button>
+      </div>
+    </div>
+
+    <!-- ==================== Page 4: 預覽匯出 ==================== -->
+    <div class="wizard-page" id="wiz-page-4">
       <h1>📋 報告預覽</h1>
       <p class="subtitle">確認資料並產出報告</p>
 
       <div class="wizard-summary" id="wizardSummary">
         <div class="summary-item"><span class="summary-label">餐廳</span><span class="summary-val" id="sumRestaurant">—</span></div>
-        <div class="summary-item"><span class="summary-label">設備群組</span><span class="summary-val" id="sumGroup">—</span></div>
-        <div class="summary-item"><span class="summary-label">設備</span><span class="summary-val" id="sumDevice">—</span></div>
-        <div class="summary-item"><span class="summary-label">異常狀態</span><span class="summary-val" id="sumAbnormal">—</span></div>
-        <div class="summary-item"><span class="summary-label">照片數量</span><span class="summary-val" id="sumPhotos">0</span></div>
+        <div class="summary-item"><span class="summary-label">總照片數</span><span class="summary-val" id="sumTotalPhotos">0</span></div>
+        <div class="summary-item"><span class="summary-label">已分類</span><span class="summary-val" id="sumClassified">0</span></div>
+        <div class="summary-item"><span class="summary-label">分類摘要</span><span class="summary-val" id="sumBreakdown" style="font-size:.75rem;">—</span></div>
       </div>
 
-      <div class="camera" id="camera">
-        <p class="camera-title">📸 拍照紀錄</p>
-        <div class="camera-actions">
-          <label for="cameraInput" class="camera-btn" style="flex:1;display:flex;align-items:center;justify-content:center">📷 拍照</label>
-          <input type="file" accept="image/*" capture="environment" id="cameraInput" style="display:none">
-          <label class="camera-btn album" style="flex:1;display:flex;align-items:center;justify-content:center">
-            🖼️ 從相簿選取
-            <input type="file" accept="image/*" id="albumInput" style="display:none">
-          </label>
-        </div>
-        <div class="photo-grid" id="photoGrid"></div>
+      <div>
+        <p class="camera-title">📸 照片紀錄（點擊可檢視）</p>
+        <div class="photo-grid" id="photoGrid4"></div>
         <div class="export-actions" id="exportActions" style="display:none;">
           <button class="export-btn share" id="shareAllBtn">📤 分享全部</button>
           <button class="export-btn save" id="saveAllBtn">💾 儲存到相簿</button>
@@ -193,13 +227,13 @@
         <div id="reportStatus" style="margin-top:8px;text-align:center;font-size:.875rem;display:none;"></div>
       </div>
       <div style="padding:12px 0 8px;display:flex;justify-content:center;">
-        <button class="wizard-prev-btn" onclick="prevPage()" style="display:none;">← 上一步</button>
+        <button class="wizard-prev-btn" onclick="prevPage()">← 上一步</button>
       </div>
     </div>
 
   </div>
 
-  <!-- Editor Overlay -->
+  <!-- ==================== Editor Overlay ==================== -->
   <div id="editor-overlay">
     <div class="editor-toolbar">
       <button class="tool-btn" onclick="setTool('pen')" id="btnPen">✏️</button>
@@ -222,19 +256,22 @@
     </div>
   </div>
 
-  <!-- Preview Overlay -->
+  <!-- ==================== Preview Overlay ==================== -->
   <div id="preview-overlay">
     <img id="previewImage" class="preview-image" src="" alt="預覽">
     <div class="preview-actions">
-      <button class="preview-btn edit-btn" onclick="editPrev()">✏️ 編輯</button>
-      <button class="preview-btn confirm-btn" onclick="keep()">✓ 加入</button>
-      <button class="preview-btn discard-btn" onclick="toss()">✕ 捨棄</button>
+      <button class="preview-btn edit-btn" onclick="editFromPreview()">✏️ 編輯</button>
+      <button class="preview-btn confirm-btn" onclick="keepPhoto()">✓ 加入</button>
+      <button class="preview-btn discard-btn" onclick="tossPhoto()">✕ 捨棄</button>
     </div>
   </div>
 
-  <footer>pwa-v2</footer>
+  <footer>pwa-v5</footer>
 
   <script>
+    // ============================================================
+    // DATA (unchanged from V2)
+    // ============================================================
     var RS = [
       { code:'S012', name:'永和' },{ code:'S022', name:'新店北新一' },{ code:'S085', name:'永和中正' },
       { code:'S099', name:'中和' },{ code:'S133', name:'新店北新二' },{ code:'S197', name:'新店安康' },
@@ -300,9 +337,39 @@
       '資料整理':[]
     };
 
-    var _dev = null, _abn = null, _pc = 0, _ps = [], _cp = null, _epi = null, _r = null, _ini = false;
+    // ============================================================
+    // STATE
+    // ============================================================
+    var _r = null;                         // selected restaurant {code, name}
+    var _cp = null;                        // current preview/editor dataUrl
+    var _epi = null;                       // edit preview index (which photo)
+    var _ini = false;                      // init flag
+    var _globalPhotoSeq = 0;               // global photo sequence
+    var photoData = [];                    // [{dataUrl, fileName, device, groupKey, groupLabel, abnormal, customText, classified}]
 
-    // ---- Selection Flow ----
+    // Classification state (Page 3)
+    var _classifyIdx = -1;
+    var _classifyGroupKey = null;
+    var _classifyGroupLabel = null;
+    var _classifyDevice = null;
+    var _classifyAbnormal = null;
+    var _classifyCustomText = null;
+
+    // ============================================================
+    // genFN (V2, unchanged)
+    // ============================================================
+    function genFN(dn, al, seq) {
+      var rn = _r ? _r.name : '未知';
+      var now = new Date();
+      var dt = now.toISOString().slice(0,10).replace(/-/g,'');
+      var tm = String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0');
+      var sq = String(seq).padStart(3,'0');
+      return _r.code + '_' + rn + '_' + dn.replace(/[/&]/g,'-') + '_' + al + '_' + dt + '_' + tm + '_' + sq + '.jpg';
+    }
+
+    // ============================================================
+    // Page 1: 餐廳選擇
+    // ============================================================
     function initSel() {
       var s = document.getElementById('restaurantSelect');
       for (var i = 0; i < RS.length; i++) {
@@ -313,176 +380,446 @@
     }
 
     function updRes(code) {
-      var re = document.getElementById('result'), ge = document.getElementById('groups');
+      var re = document.getElementById('result');
+      var btn = document.getElementById('gotoStep2Btn');
       if (!code) {
         re.innerHTML = '<span class="placeholder">尚未選擇</span>';
-        if (ge) ge.style.display = 'none';
-        _dev = _abn = _r = null; return;
+        _r = null;
+        if (btn) btn.style.display = 'none';
+        return;
       }
       for (var i = 0; i < RS.length; i++) {
         if (RS[i].code === code) {
           _r = RS[i];
           re.innerHTML = '<span class="selected">' + _r.name + '</span><span class="code">' + _r.code + '</span>';
-          if (ge) ge.style.display = 'block'; return;
+          if (btn) btn.style.display = 'inline-block';
+          return;
         }
       }
     }
 
-    function initGrp() {
-      var g = document.getElementById('groupGrid');
-      for (var i = 0; i < DGS.length; i++) {
-        var b = document.createElement('button');
-        b.className = 'group-btn';
-        b.textContent = DGS[i].icon + ' ' + DGS[i].name;
-        b.setAttribute('data-key', DGS[i].key);
-        b.addEventListener('click', function(){ selGrp(this.getAttribute('data-key'), this.textContent); });
-        g.appendChild(b);
+    // ============================================================
+    // Page 2: 拍照 (pure capture — no device/abnormal selection)
+    // ============================================================
+    function onFile(e) {
+      var f = e.target.files[0]; if (!f) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        // Show preview with edit/keep/discard options
+        _cp = ev.target.result;
+        _epi = null; // new photo, not editing existing
+        document.getElementById('previewImage').src = _cp;
+        document.getElementById('preview-overlay').classList.add('active');
+      };
+      reader.readAsDataURL(f);
+      e.target.value = '';
+    }
+
+    function keepPhoto() {
+      document.getElementById('preview-overlay').classList.remove('active');
+      _globalPhotoSeq++;
+      photoData.push({
+        dataUrl: _cp,
+        fileName: null,
+        device: null,
+        groupKey: null,
+        groupLabel: null,
+        abnormal: null,
+        customText: null,
+        classified: false
+      });
+      _cp = null;
+      renderPhotoGrid2();
+      updateGotoStep3Btn();
+    }
+
+    function tossPhoto() {
+      document.getElementById('preview-overlay').classList.remove('active');
+      _cp = null;
+      _epi = null;
+    }
+
+    function editFromPreview() {
+      // From preview overlay → go to editor
+      document.getElementById('preview-overlay').classList.remove('active');
+      document.getElementById('editor-overlay').classList.add('active');
+      initEditor(_cp, 'fabric-container');
+      // _epi is null for new photos; keepPhoto will add as new
+      // if came from viewing an existing photo (_epi set), edit it
+    }
+
+    function editPhotoFromGrid(idx) {
+      if (idx < 0 || idx >= photoData.length) return;
+      _cp = photoData[idx].dataUrl;
+      _epi = idx;
+      document.getElementById('editor-overlay').classList.add('active');
+      initEditor(_cp, 'fabric-container');
+    }
+
+    function deletePhoto(idx) {
+      photoData.splice(idx, 1);
+      if (_classifyIdx >= photoData.length) _classifyIdx = photoData.length - 1;
+      if (_classifyIdx === idx) resetClassify();
+      else if (_classifyIdx > idx) _classifyIdx--;
+      renderPhotoGrid2();
+      renderClassifyGrid();
+      updateGotoStep3Btn();
+    }
+
+    function renderPhotoGrid2() {
+      var g = document.getElementById('photoGrid2');
+      if (!g) return;
+      g.innerHTML = '';
+      for (var i = 0; i < photoData.length; i++) {
+        (function(idx){
+          var p = photoData[idx];
+          var d = document.createElement('div'); d.className = 'photo-item';
+          d.style.cursor = 'pointer';
+          var im = document.createElement('img'); im.src = p.dataUrl; im.alt = 'Photo ' + (idx+1);
+          im.addEventListener('click', function(e){ e.stopPropagation(); editPhotoFromGrid(idx); });
+          d.appendChild(im);
+          var x = document.createElement('button'); x.className = 'photo-del'; x.textContent = '✕';
+          x.addEventListener('click', function(e){ e.stopPropagation(); deletePhoto(idx); });
+          d.appendChild(x); g.appendChild(d);
+        })(i);
       }
     }
 
-    function selGrp(key, label) {
-      var bs = document.querySelectorAll('.group-btn');
-      for (var i = 0; i < bs.length; i++) { bs[i].classList.remove('selected'); }
-      var ab = document.querySelector('.group-btn[data-key="' + key + '"]');
-      if (ab) ab.classList.add('selected');
-      var r = document.getElementById('groupResult');
-      if (r) r.textContent = '已選擇：' + label;
-      initDev(key);
+    function updateGotoStep3Btn() {
+      var btn = document.getElementById('gotoStep3Btn');
+      if (btn) btn.style.display = photoData.length > 0 ? 'inline-block' : 'none';
     }
 
-    function initDev(gk) {
-      var de = document.getElementById('devices'), ge = document.getElementById('deviceGrid');
-      var re = document.getElementById('deviceResult'), ae = document.getElementById('abnormals');
-      var ce = document.getElementById('camera');
+    // ============================================================
+    // Page 3: 分類 (group → device → abnormal → save)
+    // ============================================================
+    function renderClassifyGrid() {
+      var g = document.getElementById('photoGrid3');
+      if (!g) return;
+      g.innerHTML = '';
+      for (var i = 0; i < photoData.length; i++) {
+        (function(idx){
+          var p = photoData[idx];
+          var cls = 'photo-item classify-item';
+          if (p.classified) cls += ' classified';
+          if (_classifyIdx === idx) cls += ' selected';
+          var d = document.createElement('div'); d.className = cls;
+          var im = document.createElement('img'); im.src = p.dataUrl; im.alt = 'Photo ' + (idx+1);
+          im.addEventListener('click', function(){ selectPhotoForClassify(idx); });
+          d.appendChild(im);
+          g.appendChild(d);
+        })(i);
+      }
+      updateGotoStep4Btn();
+    }
+
+    function selectPhotoForClassify(idx) {
+      if (idx < 0 || idx >= photoData.length) return;
+      _classifyIdx = idx;
+      var p = photoData[idx];
+
+      // Hide previous selections
+      var de = document.getElementById('classifyDevices');
+      var ae = document.getElementById('classifyAbnormals');
+      if (de) de.style.display = 'none';
+      if (ae) ae.style.display = 'none';
+      document.getElementById('deviceResult').textContent = '';
+      document.getElementById('abnormalResult').textContent = '';
+
+      // Restore previous classification if re-classifying
+      if (p.classified) {
+        _classifyGroupKey = p.groupKey;
+        _classifyGroupLabel = p.groupLabel;
+        _classifyDevice = p.device;
+        _classifyAbnormal = p.abnormal;
+        _classifyCustomText = p.customText;
+      } else {
+        resetClassifyState();
+      }
+
+      // Show classify panel
+      var panel = document.getElementById('classifyPanel');
+      if (panel) panel.style.display = 'block';
+
+      // Init group grid
+      initGroupGrid();
+
+      // If already has group, show devices
+      if (_classifyGroupKey) {
+        showDevices(_classifyGroupKey);
+        if (_classifyDevice) {
+          showAbnormals(_classifyDevice);
+        }
+      }
+
+      // Update subtitle
+      var sub = document.getElementById('classifySubtitle');
+      if (sub) sub.textContent = '正在分類照片 #' + (idx+1) + '/' + photoData.length;
+
+      renderClassifyGrid();
+    }
+
+    function initGroupGrid() {
+      var g = document.getElementById('groupGrid');
+      if (!g) return;
+      g.innerHTML = '';
+      for (var i = 0; i < DGS.length; i++) {
+        (function(dgs){
+          var b = document.createElement('button');
+          b.className = 'group-btn';
+          if (dgs.key === _classifyGroupKey) b.classList.add('selected');
+          b.textContent = dgs.icon + ' ' + dgs.name;
+          b.setAttribute('data-key', dgs.key);
+          b.addEventListener('click', function(){ selGroup(dgs.key, dgs.icon + ' ' + dgs.name); });
+          g.appendChild(b);
+        })(DGS[i]);
+      }
+      var gr = document.getElementById('groupResult');
+      if (gr) gr.textContent = _classifyGroupLabel ? '已選擇：' + _classifyGroupLabel : '';
+    }
+
+    function selGroup(key, label) {
+      _classifyGroupKey = key;
+      _classifyGroupLabel = label;
+      _classifyDevice = null;
+      _classifyAbnormal = null;
+      _classifyCustomText = null;
+
+      var bs = document.querySelectorAll('#groupGrid .group-btn');
+      for (var i = 0; i < bs.length; i++) { bs[i].classList.remove('selected'); }
+      var ab = document.querySelector('#groupGrid .group-btn[data-key="' + key + '"]');
+      if (ab) ab.classList.add('selected');
+
+      var gr = document.getElementById('groupResult');
+      if (gr) gr.textContent = '已選擇：' + label;
+
+      showDevices(key);
+    }
+
+    function showDevices(gk) {
+      var de = document.getElementById('classifyDevices');
+      var ge = document.getElementById('deviceGrid');
+      var re = document.getElementById('deviceResult');
+      var ae = document.getElementById('classifyAbnormals');
+
       var ds = DG[gk];
       if (!ds || ds.length === 0) { if (de) de.style.display = 'none'; return; }
       de.style.display = 'block'; ge.innerHTML = '';
-      if (re) re.textContent = ''; if (ae) ae.style.display = 'none'; if (ce) ce.style.display = 'none';
-      _dev = _abn = null; _ps = [];
+      if (re) re.textContent = '';
+      if (ae) ae.style.display = 'none';
+
       for (var i = 0; i < ds.length; i++) {
         (function(dn){
           var b = document.createElement('button');
-          b.className = 'device-btn'; b.textContent = dn;
-          b.addEventListener('click', function(){ selDev(dn); });
+          b.className = 'device-btn';
+          if (dn === _classifyDevice) b.classList.add('selected');
+          b.textContent = dn;
+          b.addEventListener('click', function(){ selDevice(dn); });
           ge.appendChild(b);
         })(ds[i]);
       }
     }
 
-    function selDev(name) {
-      _dev = name; _abn = null; _pc = 0; _ps = [];
-      var ce = document.getElementById('camera');
-      if (ce) ce.style.display = 'none';
-      var bs = document.querySelectorAll('.device-btn');
-      for (var i = 0; i < bs.length; i++) { bs[i].classList.remove('selected'); if (bs[i].textContent === name) bs[i].classList.add('selected'); }
+    function selDevice(dn) {
+      _classifyDevice = dn;
+      _classifyAbnormal = null;
+      _classifyCustomText = null;
+
+      var bs = document.querySelectorAll('#deviceGrid .device-btn');
+      for (var i = 0; i < bs.length; i++) { bs[i].classList.remove('selected'); if (bs[i].textContent === dn) bs[i].classList.add('selected'); }
       var re = document.getElementById('deviceResult');
-      if (re) re.textContent = '已選擇：' + name;
-      showAbn(name);
+      if (re) re.textContent = '已選擇：' + dn;
+
+      showAbnormals(dn);
     }
 
-    function showAbn(dn) {
-      var ae = document.getElementById('abnormals'), ge = document.getElementById('abnormalGrid');
+    function showAbnormals(dn) {
+      var ae = document.getElementById('classifyAbnormals');
+      var ge = document.getElementById('abnormalGrid');
       var re = document.getElementById('abnormalResult');
       var it = AT[dn];
-      if (!it || it.length === 0) { if (ae) ae.style.display = 'none'; return; }
+      if (!it) { if (ae) ae.style.display = 'none'; return; }
       ae.style.display = 'block'; ge.innerHTML = ''; if (re) re.textContent = '';
+
+      // List preset abnormal items
       for (var i = 0; i < it.length; i++) {
         (function(item){
           var b = document.createElement('button');
-          b.className = 'abnormal-btn ' + item.severity; b.textContent = item.label;
-          b.addEventListener('click', function(){ selAbn(item.label, dn); });
+          b.className = 'abnormal-btn ' + item.severity;
+          if (_classifyAbnormal === item.label && !_classifyCustomText) b.classList.add('selected');
+          b.textContent = item.label;
+          b.addEventListener('click', function(){ selAbnormal(item.label, null); });
           ge.appendChild(b);
         })(it[i]);
       }
-    }
 
-    function selAbn(label, dn) {
-      _abn = label; _pc = 0;
-      var bs = document.querySelectorAll('.abnormal-btn');
-      for (var i = 0; i < bs.length; i++) { bs[i].classList.remove('selected'); if (bs[i].textContent === label) bs[i].classList.add('selected'); }
-      var re = document.getElementById('abnormalResult');
-      if (re) re.textContent = dn + ' — ' + label;
-      var ce = document.getElementById('camera');
-      if (ce) ce.style.display = 'block';
-    }
-
-    // ---- Photo Handling ----
-    function onFile(e) {
-      var f = e.target.files[0]; if (!f) return;
-      addP(f); e.target.value = '';
-    }
-
-    function addP(file) {
-      var r = new FileReader();
-      r.onload = function(ev) {
-        _pc++; _cp = ev.target.result; _epi = null;
-        document.getElementById('previewImage').src = _cp;
-        document.getElementById('preview-overlay').classList.add('active');
-      };
-      r.readAsDataURL(file);
-    }
-
-    function keep() {
-      document.getElementById('preview-overlay').classList.remove('active');
-      if (_epi != null) {
-        _ps[_epi].dataUrl = _cp;
+      // ✏️ 自訂 button at the bottom — dashed border
+      var cb = document.createElement('button');
+      cb.className = 'abnormal-btn custom';
+      if (_classifyCustomText) {
+        cb.classList.add('selected');
+        cb.textContent = '✏️ ' + _classifyCustomText;
       } else {
-        var dn = _dev || '未知', al = _abn || '未知';
-        var fn = genFN(dn, al, _pc);
-        _ps.push({ dataUrl: _cp, fileName: fn });
+        cb.textContent = '✏️ 自訂';
       }
-      _cp = _epi = null; renderPS();
+      cb.addEventListener('click', function(){
+        var txt = prompt('請輸入自訂異常描述：', _classifyCustomText || '');
+        if (txt !== null && txt.trim() !== '') {
+          selAbnormal(txt.trim(), txt.trim());
+        } else if (txt === '') {
+          _classifyAbnormal = null;
+          _classifyCustomText = null;
+          showAbnormals(dn);
+        }
+      });
+      ge.appendChild(cb);
     }
 
-    function toss() {
-      document.getElementById('preview-overlay').classList.remove('active');
-      if (_epi == null) _pc = Math.max(0, _pc - 1);
-      _cp = _epi = null;
+    function selAbnormal(label, customText) {
+      _classifyAbnormal = label;
+      _classifyCustomText = customText;
+
+      var bs = document.querySelectorAll('#abnormalGrid .abnormal-btn');
+      for (var i = 0; i < bs.length; i++) {
+        bs[i].classList.remove('selected');
+        if (customText && bs[i].classList.contains('custom')) {
+          bs[i].textContent = '✏️ ' + customText;
+          bs[i].classList.add('selected');
+        } else if (!customText && bs[i].textContent === label) {
+          bs[i].classList.add('selected');
+        }
+      }
+      var re = document.getElementById('abnormalResult');
+      if (re) re.textContent = (_classifyDevice||'') + ' — ' + label;
     }
 
-    function genFN(dn, al, seq) {
-      var rn = _r ? _r.name : '未知';
-      var now = new Date();
-      var dt = now.toISOString().slice(0,10).replace(/-/g,'');
-      var tm = String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0');
-      var sq = String(seq).padStart(3,'0');
-      return _r.code + '_' + rn + '_' + dn.replace(/[/&]/g,'-') + '_' + al + '_' + dt + '_' + tm + '_' + sq + '.jpg';
+    function resetClassifyState() {
+      _classifyGroupKey = null;
+      _classifyGroupLabel = null;
+      _classifyDevice = null;
+      _classifyAbnormal = null;
+      _classifyCustomText = null;
     }
 
-    function preview(idx) {
-      _cp = _ps[idx].dataUrl; _epi = idx;
-      document.getElementById('previewImage').src = _cp;
-      document.getElementById('preview-overlay').classList.add('active');
+    function resetClassify() {
+      _classifyIdx = -1;
+      resetClassifyState();
+      var panel = document.getElementById('classifyPanel');
+      if (panel) panel.style.display = 'none';
+      var sub = document.getElementById('classifySubtitle');
+      if (sub) sub.textContent = '點選照片，為它選擇設備與異常狀態';
+      renderClassifyGrid();
     }
 
-    function editPrev() {
-      document.getElementById('preview-overlay').classList.remove('active');
+    function confirmClassify() {
+      if (_classifyIdx < 0 || _classifyIdx >= photoData.length) return;
+      if (!_classifyDevice) { alert('請先選擇設備'); return; }
+      if (!_classifyAbnormal && !_classifyCustomText) { alert('請選擇異常狀態或輸入自訂描述'); return; }
+
+      var p = photoData[_classifyIdx];
+      p.device = _classifyDevice;
+      p.groupKey = _classifyGroupKey;
+      p.groupLabel = _classifyGroupLabel;
+      p.abnormal = _classifyAbnormal;
+      p.customText = _classifyCustomText;
+      p.classified = true;
+
+      // Generate filename NOW (on save)
+      p.fileName = genFN(_classifyDevice, _classifyAbnormal, _classifyIdx + 1);
+
+      // Move to next unclassified photo, or reset
+      var nextIdx = -1;
+      for (var i = 0; i < photoData.length; i++) {
+        if (!photoData[i].classified) { nextIdx = i; break; }
+      }
+      if (nextIdx >= 0) {
+        selectPhotoForClassify(nextIdx);
+      } else {
+        resetClassify();
+      }
+    }
+
+    function editClassifyPhoto() {
+      if (_classifyIdx < 0 || _classifyIdx >= photoData.length) return;
+      _cp = photoData[_classifyIdx].dataUrl;
+      _epi = _classifyIdx;
       document.getElementById('editor-overlay').classList.add('active');
       initEditor(_cp, 'fabric-container');
     }
 
-    function renderPS() {
-      var g = document.getElementById('photoGrid'); g.innerHTML = '';
-      for (var i = 0; i < _ps.length; i++) {
+    function updateGotoStep4Btn() {
+      var btn = document.getElementById('gotoStep4Btn');
+      if (!btn) return;
+      var allClassified = photoData.length > 0;
+      for (var i = 0; i < photoData.length; i++) {
+        if (!photoData[i].classified) { allClassified = false; break; }
+      }
+      btn.style.display = allClassified ? 'inline-block' : 'none';
+    }
+
+    // ============================================================
+    // Page 4: 預覽匯出
+    // ============================================================
+    function renderPhotoGrid4() {
+      var g = document.getElementById('photoGrid4');
+      if (!g) return;
+      g.innerHTML = '';
+      for (var i = 0; i < photoData.length; i++) {
         (function(idx){
-          var p = _ps[idx];
-          var d = document.createElement('div'); d.className = 'photo-item';
-          var im = document.createElement('img'); im.src = p.dataUrl; im.title = p.fileName + ' (點擊編輯)'; im.style.cursor = 'pointer';
-          im.addEventListener('click', function(e){ e.stopPropagation(); preview(idx); });
+          var p = photoData[idx];
+          var cls = 'photo-item';
+          if (p.classified) cls += ' classified';
+          var d = document.createElement('div'); d.className = cls;
+          var im = document.createElement('img'); im.src = p.dataUrl; im.title = p.fileName || '未分類';
+          im.style.cursor = 'pointer';
+          im.addEventListener('click', function(e){ e.stopPropagation(); previewPhoto(idx); });
           d.appendChild(im);
-          var x = document.createElement('button'); x.className = 'photo-del'; x.textContent = '✕';
-          x.addEventListener('click', function(e){ e.stopPropagation(); _ps.splice(idx,1); renderPS(); });
-          d.appendChild(x); g.appendChild(d);
+          g.appendChild(d);
         })(i);
       }
       var ee = document.getElementById('exportActions');
-      if (ee) ee.style.display = _ps.length > 0 ? 'flex' : 'none';
+      if (ee) ee.style.display = photoData.length > 0 ? 'flex' : 'none';
     }
 
+    function previewPhoto(idx) {
+      _cp = photoData[idx].dataUrl; _epi = idx;
+      document.getElementById('previewImage').src = _cp;
+      document.getElementById('preview-overlay').classList.add('active');
+    }
+
+    function updateSummary() {
+      var sr = document.getElementById('sumRestaurant');
+      var st = document.getElementById('sumTotalPhotos');
+      var sc = document.getElementById('sumClassified');
+      var sb = document.getElementById('sumBreakdown');
+      if (sr) sr.textContent = _r ? _r.code + ' ' + _r.name : '—';
+      if (st) st.textContent = String(photoData.length);
+      var classifiedCount = 0;
+      var breakdown = {};
+      for (var i = 0; i < photoData.length; i++) {
+        if (photoData[i].classified) {
+          classifiedCount++;
+          var key = (photoData[i].device||'未知') + ' / ' + (photoData[i].abnormal||'未知');
+          breakdown[key] = (breakdown[key]||0) + 1;
+        }
+      }
+      if (sc) sc.textContent = String(classifiedCount);
+      if (sb) {
+        var parts = [];
+        for (var k in breakdown) {
+          if (breakdown.hasOwnProperty(k)) parts.push(k + ' ×' + breakdown[k]);
+        }
+        sb.textContent = parts.length > 0 ? parts.join(', ') : '—';
+      }
+    }
+
+    // ============================================================
+    // share / save (V2, adapted for photoData)
+    // ============================================================
     function share() {
       var pr = [];
-      for (var i = 0; i < _ps.length; i++) {
-        (function(p){ pr.push(fetch(p.dataUrl).then(function(r){return r.blob()}).then(function(b){return new File([b],p.fileName,{type:'image/jpeg'})})); })(_ps[i]);
+      for (var i = 0; i < photoData.length; i++) {
+        (function(p){ pr.push(fetch(p.dataUrl).then(function(r){return r.blob()}).then(function(b){return new File([b],p.fileName||('photo_'+i+'.jpg'),{type:'image/jpeg'})})); })(photoData[i]);
       }
       Promise.all(pr).then(function(fs) {
         if (navigator.canShare && navigator.canShare({files:fs})) navigator.share({files:fs});
@@ -492,13 +829,15 @@
     }
 
     function save() {
-      for (var i = 0; i < _ps.length; i++) {
-        var a = document.createElement('a'); a.href = _ps[i].dataUrl; a.download = _ps[i].fileName;
+      for (var i = 0; i < photoData.length; i++) {
+        var a = document.createElement('a'); a.href = photoData[i].dataUrl; a.download = photoData[i].fileName || ('photo_'+(i+1)+'.jpg');
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
       }
     }
 
-    // 提示音（Web Audio API）
+    // ============================================================
+    // beep (V2, unchanged)
+    // ============================================================
     function beep() {
       try {
         var ac = new (window.AudioContext || window.webkitAudioContext)();
@@ -509,7 +848,6 @@
         g.gain.value = 0.3;
         o.connect(g); g.connect(ac.destination);
         o.start();
-        // 三短一長
         setTimeout(function(){ o.frequency.value = 660; }, 200);
         setTimeout(function(){ o.frequency.value = 880; }, 400);
         setTimeout(function(){ o.frequency.value = 660; }, 600);
@@ -518,6 +856,9 @@
       } catch(e) {}
     }
 
+    // ============================================================
+    // generateReport (V2, unchanged)
+    // ============================================================
     function generateReport() {
       var btn = document.getElementById('generateReportBtn');
       var rs = document.getElementById('reportStatus');
@@ -547,7 +888,9 @@
         });
     }
 
-    // ---- Editor (Fabric.js) ----
+    // ============================================================
+    // Editor (Fabric.js) — V2, completely unchanged
+    // ============================================================
     var _cv = null, _hist = [], _ds = null, _cr = null, _tool = null, _ts = null;
     var _tb = { pen:'btnPen', line:'btnLine', arrow:'btnArrow', circle:'btnCircle', rect:'btnRect', crop:'btnCrop' };
 
@@ -664,16 +1007,41 @@
 
     function saveEditor() {
       if (!_cv) return;
-      if (_cr) { applyCrop(function(){ _cp = _cv.toDataURL({format:'jpeg',quality:0.92}); closeEditor(); }); return; }
-      _cp = _cv.toDataURL({ format:'jpeg', quality:0.92 }); closeEditor();
+      if (_cr) { applyCrop(function(){ _cp = _cv.toDataURL({format:'jpeg',quality:0.92}); finishEditor(); }); return; }
+      _cp = _cv.toDataURL({ format:'jpeg', quality:0.92 }); finishEditor();
     }
 
     function closeEditor() {
       if (_cv) _cv.dispose();
       _cv = _hist = []; _ds = _cr = _tool = _ts = null;
       document.getElementById('editor-overlay').classList.remove('active');
-      document.getElementById('previewImage').src = _cp;
-      document.getElementById('preview-overlay').classList.add('active');
+    }
+
+    function finishEditor() {
+      if (_cv) _cv.dispose();
+      _cv = _hist = []; _ds = _cr = _tool = _ts = null;
+      document.getElementById('editor-overlay').classList.remove('active');
+
+      // Update photo in photoData
+      if (_epi != null && _epi < photoData.length) {
+        photoData[_epi].dataUrl = _cp;
+      }
+
+      _cp = null;
+      var savedEpi = _epi;
+      _epi = null;
+
+      // Re-render all grids
+      renderPhotoGrid2();
+      renderClassifyGrid();
+      if (_wizPage === 4) renderPhotoGrid4();
+
+      // If we came from classify page, re-select the photo
+      if (_classifyIdx >= 0 && _classifyIdx < photoData.length) {
+        selectPhotoForClassify(_classifyIdx);
+      }
+
+      updateGotoStep3Btn();
     }
 
     function applyCrop(cb) {
@@ -697,21 +1065,10 @@
       img.src = url;
     }
 
-    // ---- Wizard Navigation ----
-    var _wizPage = 1, _wizGrpLabel = '';
-
-    function updateSummary() {
-      var sr = document.getElementById('sumRestaurant');
-      var sg = document.getElementById('sumGroup');
-      var sd = document.getElementById('sumDevice');
-      var sa = document.getElementById('sumAbnormal');
-      var sp = document.getElementById('sumPhotos');
-      if (sr) sr.textContent = _r ? _r.code + ' ' + _r.name : '—';
-      if (sg) sg.textContent = _wizGrpLabel || '—';
-      if (sd) sd.textContent = _dev || '—';
-      if (sa) sa.textContent = _abn || '—';
-      if (sp) sp.textContent = String(_ps.length);
-    }
+    // ============================================================
+    // Wizard Navigation (4 pages)
+    // ============================================================
+    var _wizPage = 1;
 
     function goToPage(n) {
       _wizPage = n;
@@ -731,53 +1088,33 @@
         if (s === n) dots[j].classList.add('active');
       }
 
-      // Prev button
+      // Prev button visibility
       var btns = document.querySelectorAll('.wizard-prev-btn');
       for (var k = 0; k < btns.length; k++) {
         btns[k].style.display = n > 1 ? 'inline-block' : 'none';
       }
 
-      if (n === 3) updateSummary();
+      // Page-specific init
+      if (n === 3) {
+        renderClassifyGrid();
+        _classifyIdx = -1;
+        resetClassifyState();
+        var panel = document.getElementById('classifyPanel');
+        if (panel) panel.style.display = 'none';
+      }
+      if (n === 4) {
+        updateSummary();
+        renderPhotoGrid4();
+      }
     }
 
     function prevPage() {
       if (_wizPage > 1) goToPage(_wizPage - 1);
     }
 
-    // Wrap functions with auto-advance (original logic preserved intact)
-    (function() {
-      var _origSelGrp = selGrp;
-      selGrp = function(key, label) {
-        _origSelGrp(key, label);
-        _wizGrpLabel = label;
-        goToPage(2);
-      };
-
-      var _origSelAbn = selAbn;
-      selAbn = function(label, dn) {
-        _origSelAbn(label, dn);
-        goToPage(3);
-        updateSummary();
-      };
-
-      var _origSelDev = selDev;
-      selDev = function(name) {
-        _origSelDev(name);
-        var it = AT[name];
-        if (!it || it.length === 0) {
-          goToPage(3);
-          updateSummary();
-        }
-      };
-
-      var _origKeep = keep;
-      keep = function() {
-        _origKeep();
-        updateSummary();
-      };
-    })();
-
-    // ---- Bindings & Init ----
+    // ============================================================
+    // Bindings & Init
+    // ============================================================
     function bindBtns() {
       var ci = document.getElementById('cameraInput'), ai = document.getElementById('albumInput');
       if (ci) ci.addEventListener('change', onFile);
@@ -791,7 +1128,8 @@
 
     function setup() {
       if (_ini) return; _ini = true;
-      initSel(); initGrp(); bindBtns();
+      initSel();
+      bindBtns();
       var s = document.getElementById('restaurantSelect');
       if (s) s.addEventListener('change', function(){ updRes(s.value); });
     }
